@@ -1,0 +1,39 @@
+// /Experiment 11: Find ε-closure for all states in an NFA
+#include <stdio.h>
+
+int main() {
+    int n, e[10][10], i, j, k;
+    int closure[10][10] = {0};
+
+    printf("Enter number of states: ");
+    scanf("%d", &n);
+
+    printf("Enter epsilon transition matrix (%d x %d):\n", n, n);
+    for (i = 0; i < n; i++)
+        for (j = 0; j < n; j++)
+            scanf("%d", &e[i][j]);
+
+    for (i = 0; i < n; i++) {
+        closure[i][i] = 1;
+        for (j = 0; j < n; j++)
+            if (e[i][j])
+                closure[i][j] = 1;
+    }
+
+    for (k = 0; k < n; k++)
+        for (i = 0; i < n; i++)
+            for (j = 0; j < n; j++)
+                if (closure[i][k] && closure[k][j])
+                    closure[i][j] = 1;
+
+    printf("\nEpsilon closures:\n");
+    for (i = 0; i < n; i++) {
+        printf("E-closure(q%d) = { ", i);
+        for (j = 0; j < n; j++)
+            if (closure[i][j])
+                printf("q%d ", j);
+        printf("}\n");
+    }
+
+    return 0;
+}
